@@ -1,0 +1,55 @@
+# Create a classification model with Azure Machine Learning designer
+
+* Classification is a supervised ML technique used to predict categories or classes. 
+
+* Use Azure ML designer to create classification models by using a drag and drop visual interface, without needing to write any code.
+
+# Identify classification machine learning scenarios
+
+* Classification is a form of ML that is used to predict which category, or class, an item belongs to. This ML technique can be applied to binary and multi-class scenarios. 
+
+* For example, a health clinic might use the characteristics of a patient (such as age, weight, blood pressure, and so on) to predict whether the patient is at risk of diabetes. In this case, the characteristics of the patient are the features, and the label is a binary classification of either 0 or 1, representing non-diabetic or diabetic.
+
+* Diagram of patients with clinical data, classified as diabetic and non-diabetic.
+* ![](img/5/1.diabetes.png)
+
+* Like regression, classification is an example of a supervised ML technique in which you train a model using data that includes both the features and known values for the label, so that the model learns to fit the feature combinations to the label. Then, after training has been completed, you can use the trained model to predict labels for new items for which the label is unknown.
+
+* Scenarios for classification machine learning models:
+    1. Using clinical data to predict whether a patient will become sick or not.
+    2. Using historical data to predict whether text sentiment is positive, negative, or neutral.
+    3. Using characteristics of small businesses to predict if a new venture will succeed.
+
+# Understand steps for classification
+* Steps to train and evaluate a regression machine learning model as: [Refer ](https://github.com/mkader/Azure-AI/blob/main/3.Use%20Automated%20ML%20in%20Azure%20ML.MD#the-steps-in-a-machine-learning-process-as)
+
+1. <u>Prepare data</u> (refer previous 4 MD)
+![](img/5/2.classification-train-model-example.png)
+2. <u>Train model</u> - To train a classification model, you need a dataset that includes historical features, characteristics of the entity for which you want to make a prediction, and known label values. The label is the class indicator you want to train a model to predict.
+![](img/5/3.evaluate-model-example.png)
+3. <u>Evaluate performance</u>
+    1. <u>Confusion matrix</u> - is a tool used to assess the quality of a classification model's predictions. It compares predicted labels against actual labels.
+        ![](img/5/4.confusion-matrix-terms.png)
+        1. In a binary classification model where you're predicting one of two possible values, the confusion matrix is a 2x2 grid showing the predicted and actual value counts for classes 1 and 0. It categorizes the model's results into four types of outcomes. Using our diabetes example these outcomes can look like:
+            1. <u>True Positive</u>: The model predicts the patient has diabetes, and the patient does actually have diabetes.
+            2. <u>False Positive</u>: The model predicts the patient has diabetes, but the patient doesn't actually have diabetes.
+            3. <u>False Negative</u>: The model predicts the patient doesn't have diabetes, but the patient actually does have diabetes.
+            4. <u>True Negative</u>: The model predicts the patient doesn't have diabetes, and the patient actually doesn't have diabetes.
+        ![](img/5/5.confusion-matrix.png)
+        2. data for 100 patients. create a model that predicts a patient doesn't have diabetes 15% of the time, so it predicts 15 people have diabetes and predicts 85 people do not have diabetes. In actuality, suppose 25 people actually do have diabetes and 75 people actually do not have diabetes. Refer image.
+        3. For a multi-class classification model (where there are more than two possible classes), the same approach is used to tabulate each possible combination of actual and predicted value counts - so a model with three possible classes would result in a 3x3 matrix with a diagonal line of cells where the predicted and actual labels match.
+        4. Metrics that can be derived from the confusion matrix include:
+            1. <u>Accuracy</u>: The number of correct predictions (true positives + true negatives) divided by the total number of predictions.
+            2. <u>Precision</u>: The number of the cases classified as positive that are actually positive: the number of true positives divided by (the number of true positives plus false positives).
+            3. <u>Recall</u>: The fraction of positive cases correctly identified: the number of true positives divided by (the number of true positives plus false negatives).
+            4. <u>F1 Score</u>: An overall metric that essentially combines precision and recall.
+        5. Of these metrics, accuracy may be the most intuitive. However, you need to be careful about using accuracy as a measurement of how well a model performs. Using the model that predicts 15% of patients have diabetes, when actually 25% of patients have diabetes, we can calculate the following metrics:
+            1. The accuracy of the model is: (10+70)/ 100 = 80%.
+            2. The precision of the model is: 10/(10+5) = 67%.
+            3. The recall of the model is 10/(10+15) = 40%
+    2. <u>Choosing a threshold</u> - A classification model predicts the probability for each possible class. In other words, the model calculates a likelihood for each predicted label. In the case of a binary classification model, the predicted probability is a value between 0 and 1. By default, a predicted probability including or above 0.5 results in a class prediction of 1, while a prediction below this threshold means that there's a greater probability of a negative prediction (remember that the probabilities for all classes add up to 1), so the predicted class would be 0.
+        ![](img/5/6.threshold-example.png)
+        1. Designer has a useful threshold slider for reviewing how the model performance would change depending on the set threshold. 
+    ![](img/5/7.roc-curve-example.png)
+    3. <u>ROC curve and AUC metric</u> - Another term for recall is True positive rate, and it has a corresponding metric named False positive rate, which measures the number of negative cases incorrectly identified as positive compared between the number of actual negative cases. Plotting these metrics against each other for every possible threshold value between 0 and 1 results in a curve, known as the <u>ROC curve (ROC stands for receiver operating characteristic, but most data scientists just call it a ROC curve)</u>. In an ideal model, the curve would go all the way up the left side and across the top, so that it covers the full area of the chart. The larger the area under the curve, of AUC metric, (which can be any value from 0 to 1), the better the model is performing. You can review the ROC curve in Evaluation Results.
+4. <u>Deploy a predictive service</u>
